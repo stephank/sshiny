@@ -1,0 +1,16 @@
+{
+  "name": "sshiny",
+  "version": "0.0.0",
+  "description": "SSH client & server",
+  "main": "index.js",
+  "dependencies": {
+    "buffers": "0.1",
+    "walkbuf": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stephank/sshiny.git"
+  },
+  "author": "Stéphan Kochen <stephan@kochen.nl>",
+  "license": "MIT"
+}
