@@ -17,5 +17,10 @@ exports.connect = function(host, options) {
     });
   });
 
+  tspt.on('secure', function(writer) {
+    // FIXME: test
+    writer('ignore');
+  });
+
   return tspt;
 };
