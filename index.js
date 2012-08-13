@@ -1,6 +1,5 @@
 var net = require('net');
 var Transport = require('./lib/transport');
-var kex = require('./lib/kex');
 
 exports.version = require('./package.json').version;
 
@@ -11,16 +10,23 @@ exports.connect = function(host, options) {
   var tspt = new Transport('client', stream);
 
   stream.on('connect', function() {
-    tspt.write(function(writer) {
-      writer('handshake', 'SSH-2.0-sshiny_' + exports.version);
-      kex(tspt, writer);
+    tspt._start(function(writer) {
+      // FIXME: test
+      writer('ignore');
     });
   });
 
-  tspt.on('secure', function(writer) {
-    // FIXME: test
-    writer('ignore');
-  });
-
   return tspt;
+};
+
+exports.createServer = function(options) {
+  options = (options || {});
+
+  return net.createServer(function(stream) {
+    var tspt = new Transport('server', stream);
+    tspt._start(function(writer) {
+      // FIXME: test
+      writer('ignore');
+    });
+  });
 };

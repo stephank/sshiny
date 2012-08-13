@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-var net = require('net');
 var sshiny = require('./');
 
-var tspt = sshiny.connect('localhost');
+var server = sshiny.createServer();
+server.listen(60022);
+
+var tspt = sshiny.connect('localhost', { port: 60022 });
