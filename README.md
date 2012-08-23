@@ -4,6 +4,16 @@ This is a work in progress, but will eventually be an SSH client and server.
 
 You're looking at a code dump, there's nothing functional here, at the moment.
 
+### Testing
+
+Test a SSHiny client against a SSHiny server:
+
+    node test.js
+
+Test a SSHiny client with any SSH server:
+
+    node testRemote.js <host> <port>
+
 ### License
 
 Copyright © 2012 Stéphan Kochen
