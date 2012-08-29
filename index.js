@@ -1,5 +1,6 @@
 var net = require('net');
 var Transport = require('./lib/transport');
+var service = require('./lib/service');
 
 exports.version = require('./package.json').version;
 
@@ -11,8 +12,7 @@ exports.connect = function(host, options) {
 
   stream.on('connect', function() {
     tspt._start(function(writer) {
-      // FIXME: test
-      writer('ignore');
+      service(tspt, 'ssh-userauth', writer);
     });
   });
 
@@ -24,9 +24,6 @@ exports.createServer = function(options) {
 
   return net.createServer(function(stream) {
     var tspt = new Transport('server', stream);
-    tspt._start(function(writer) {
-      // FIXME: test
-      writer('ignore');
-    });
+    tspt._start();
   });
 };
