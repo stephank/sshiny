@@ -1,8 +1,6 @@
 var net = require('net');
 var Transport = require('./lib/transport');
-var service = require('./lib/service');
-
-exports.version = require('./package.json').version;
+var service = require('./lib/transport/service');
 
 exports.connect = function(host, options) {
   options = (options || {});
