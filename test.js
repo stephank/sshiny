@@ -2,7 +2,17 @@
 
 var sshiny = require('./');
 
-var server = sshiny.createServer();
+var server = sshiny.transport.createServer(function(conn, name, writer) {
+  if (name !== 'ssh-connection') {
+    writer.reject();
+    return;
+  }
+
+  writer.accept();
+  // ...
+});
 server.listen(60022);
 
-var tspt = sshiny.connect('localhost', { port: 60022 });
+sshiny.transport.connect('localhost', 'ssh-connection', { port: 60022 }, function() {
+  // ...
+});
