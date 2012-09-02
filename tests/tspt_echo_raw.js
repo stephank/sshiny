@@ -11,13 +11,13 @@ var hello = 'Hello world!';
 
 // Server.
 
-var server = transport.createServer(function(tspt, name, writer) {
+var server = transport.createServer(function(tspt, name) {
   // Respond to the service request.
   if (name !== 'echo') {
-    return writer.reject();
+    return tspt.reject();
   }
   else {
-    writer.accept();
+    tspt.accept();
   }
 
   // Echo back messages verbatim.
