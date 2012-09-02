@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 
 // An echo service on top of the SSH transport layer. Server and client.
+// This version uses the `struct` module to build messages.
 
 var sshiny = require('../');
 var struct = sshiny.struct;
 var transport = sshiny.transport;
+
+var hello = 'Hello world!';
 
 
 // Echo service message definitions.
@@ -26,10 +29,8 @@ msg('echoRes', 193,
 
 // Request handler, sends a response.
 M.echoReq.handle = function(tspt, params) {
-  tspt.write(function(writer) {
-    writer(M.echoRes, {
-      'text': params.text
-    })
+  tspt.write(M.echoRes, {
+    'text': params.text
   });
 };
 
@@ -42,13 +43,15 @@ M.echoRes.handle = function(tspt, params) {
 // Server.
 
 var server = transport.createServer(function(tspt, name, writer) {
+  // Respond to the service request.
   if (name !== 'echo') {
-    writer.reject();
-    return;
+    return writer.reject();
+  }
+  else {
+    writer.accept();
   }
 
-  writer.accept();
-
+  // Dispatch messages.
   tspt.on('message', function(payload) {
     M.dispatch(tspt, payload);
   });
@@ -60,14 +63,13 @@ server.listen(60022);
 // Client.
 
 var tspt = transport.connect('localhost', 'echo', { port: 60022 }, function() {
-  tspt.on('message', function(payload) {
-    M.dispatch(tspt, payload);
+  // Send the request message.
+  tspt.write(M.echoReq, {
+    'text': hello
   });
 
-  // Send an initial request.
-  tspt.write(function(writer) {
-    writer(M.echoReq, {
-      'text': 'Hello world!'
-    });
+  // Dispatch messages.
+  tspt.on('message', function(payload) {
+    M.dispatch(tspt, payload);
   });
 });
